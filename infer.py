@@ -40,7 +40,7 @@ vocab_char_map, vocab_size = get_tokenizer()
 
 def main() -> None:
     parser = ArgumentParser(
-        name="Inference",
+        prog="Inference",
         description="推論します。",
     )
     parser.add_argument(
