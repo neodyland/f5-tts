@@ -41,47 +41,6 @@ vocos = Vocos.from_pretrained("charactr/vocos-mel-24khz")
 # Tokenizer
 vocab_char_map, vocab_size = get_tokenizer()
 
-start = time.time()
-ref_text = "水をマレーシアから買わなくてはならないのです。"
-gen_text = "おはようございます。"
-texts, _ = text_to_sequence(ref_text + gen_text)
-audio, sr = torchaudio.load("test.wav")
-rms = torch.sqrt(torch.mean(torch.square(audio)))
-if rms < target_rms:
-    audio = audio * target_rms / rms
-if sr != target_sample_rate:
-    resampler = torchaudio.transforms.Resample(sr, target_sample_rate)
-    audio = resampler(audio)
-audio = audio.to(device)
-ref_audio_len = audio.shape[-1] // hop_length
-duration = ref_audio_len + int(
-    ref_audio_len
-    / len(text_to_sequence(ref_text)[0])
-    * len(text_to_sequence(gen_text)[0])
-    / speed
-)
-# Inference
-with torch.inference_mode():
-    generated, _ = model.sample(
-        cond=audio,
-        text=[texts],
-        duration=duration,
-        steps=32,
-        cfg_strength=cfg_strength,
-        sway_sampling_coef=-1.0,
-        seed=114514,
-    )
-
-generated = generated[:, ref_audio_len:, :]
-generated_mel_spec = rearrange(generated, "1 n d -> 1 d n")
-generated_wave = vocos.decode(generated_mel_spec.cpu())
-if rms < target_rms:
-    generated_wave = generated_wave * rms / target_rms
-
-save_spectrogram(generated_mel_spec[0].cpu().numpy(), f"output.png")
-torchaudio.save(f"output.wav", generated_wave, target_sample_rate)
-print(f"Generated wav: {generated_wave.shape}")
-
 
 def main() -> None:
     parser = ArgumentParser(
