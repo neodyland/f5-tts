@@ -9,7 +9,8 @@ accelerate
 matplotlib
 ema_pytorch
 vocos
-pyopenjtalk
+pyopenjtalk_dict
+numpy<2
 inflect
 einx
 tensorboard
