@@ -44,7 +44,12 @@ def main() -> None:
         description="推論します。",
     )
     parser.add_argument(
-        "text",
+        "--ref_text",
+        type=str,
+        help="テキスト",
+    )
+    parser.add_argument(
+        "--gen_text",
         type=str,
         help="テキスト",
     )
@@ -109,7 +114,7 @@ def main() -> None:
         model.load_state_dict(checkpoint["model_state_dict"])
 
     start = time.time()
-    texts, _ = text_to_sequence(args.text)
+    texts, _ = text_to_sequence(args.ref_text + args.gen_text)
     audio, sr = torchaudio.load("test.wav")
     rms = torch.sqrt(torch.mean(torch.square(audio)))
     if rms < target_rms:
@@ -121,8 +126,8 @@ def main() -> None:
     ref_audio_len = audio.shape[-1] // hop_length
     duration = ref_audio_len + int(
         ref_audio_len
-        / len(text_to_sequence(ref_text)[0])
-        * len(text_to_sequence(gen_text)[0])
+        / len(text_to_sequence(args.ref_text)[0])
+        * len(text_to_sequence(args.gen_text)[0])
         / speed
         * 1.2
     )
@@ -138,7 +143,6 @@ def main() -> None:
             sway_sampling_coef=-1.0,
             seed=114514,
         )
-
 
     generated = generated[:, ref_audio_len:, :]
     generated_mel_spec = rearrange(generated, "1 n d -> 1 d n")
