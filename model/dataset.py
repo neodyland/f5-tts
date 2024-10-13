@@ -69,7 +69,7 @@ class HFDataset(Dataset):
 
         mel_spec = rearrange(mel_spec, "1 d t -> d t")
 
-        text = text_to_sequence(row[self.text])[0]
+        text = torch.tensor(text_to_sequence(row[self.text])[0], dtype=torch.long)
 
         return dict(
             mel_spec=mel_spec,
