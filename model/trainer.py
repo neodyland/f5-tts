@@ -187,7 +187,7 @@ class Trainer:
                 train_dataset,
                 collate_fn=collate_fn,
                 num_workers=num_workers,
-                pin_memory=True,
+                pin_memory=False,
                 batch_size=self.batch_size,
                 shuffle=True,
                 generator=generator,
@@ -206,7 +206,7 @@ class Trainer:
                 train_dataset,
                 collate_fn=collate_fn,
                 num_workers=num_workers,
-                pin_memory=True,
+                pin_memory=False,
                 batch_sampler=batch_sampler,
             )
         else:
