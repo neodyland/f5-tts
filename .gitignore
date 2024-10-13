@@ -4,3 +4,4 @@ ckpts/
 *.wav
 *.png
 .aider*
+*.sh
