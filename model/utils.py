@@ -90,29 +90,6 @@ def maybe_masked_mean(t: float["b n d"], mask: bool["b n"] = None) -> float["b d
     return einx.divide("b d, b -> b d", num, den.clamp(min=1.0))
 
 
-# simple utf-8 tokenizer, since paper went character based
-def list_str_to_tensor(text: list[str], padding_value=-1) -> int["b nt"]:
-    list_tensors = [torch.tensor([*bytes(t, "UTF-8")]) for t in text]  # ByT5 style
-    text = pad_sequence(list_tensors, padding_value=padding_value, batch_first=True)
-    return text
-
-
-# char tokenizer, based on custom dataset's extracted .txt file
-def list_str_to_idx(
-    text: list[str] | list[list[str]],
-    vocab_char_map: dict[str, int],  # {char: idx}
-    padding_value=-1,
-) -> int["b nt"]:
-    list_idx_tensors = [
-        torch.tensor([vocab_char_map.get(c, 0) for c in t]) for t in text
-    ]  # pinyin or char style
-    text = pad_sequence(list_idx_tensors, padding_value=padding_value, batch_first=True)
-    return text
-
-
-# Get tokenizer
-
-
 def get_tokenizer():
     from text import symbol_to_id as vocab_char_map
 

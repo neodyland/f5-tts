@@ -10,6 +10,7 @@ from datasets import load_dataset as hf_load_dataset
 from einops import rearrange
 
 from model.modules import MelSpec
+from text import text_to_sequence
 
 
 class HFDataset(Dataset):
@@ -68,7 +69,7 @@ class HFDataset(Dataset):
 
         mel_spec = rearrange(mel_spec, "1 d t -> d t")
 
-        text = row[self.text]
+        text = text_to_sequence(row[self.text])[0]
 
         return dict(
             mel_spec=mel_spec,

@@ -25,8 +25,6 @@ from model.modules import MelSpec
 from model.utils import (
     default,
     exists,
-    list_str_to_idx,
-    list_str_to_tensor,
     lens_to_mask,
     mask_from_frac_lengths,
 )
@@ -112,15 +110,6 @@ class CFM(nn.Module):
         batch, cond_seq_len, device = *cond.shape[:2], cond.device
         if not exists(lens):
             lens = torch.full((batch,), cond_seq_len, device=device, dtype=torch.long)
-
-        # text
-
-        if isinstance(text, list):
-            if exists(self.vocab_char_map):
-                text = list_str_to_idx(text, self.vocab_char_map).to(device)
-            else:
-                text = list_str_to_tensor(text).to(device)
-            assert text.shape[0] == batch
 
         if exists(text):
             text_lens = (text != -1).sum(dim=-1)
@@ -251,14 +240,6 @@ class CFM(nn.Module):
             self.device,
             self.sigma,
         )
-
-        # handle text as string
-        if isinstance(text, list):
-            if exists(self.vocab_char_map):
-                text = list_str_to_idx(text, self.vocab_char_map).to(device)
-            else:
-                text = list_str_to_tensor(text).to(device)
-            assert text.shape[0] == batch
 
         # lens and mask
         if not exists(lens):
