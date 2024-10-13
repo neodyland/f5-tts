@@ -37,12 +37,8 @@ else:
 
 output_dir = "output"
 
-
-infer_batch_size = 1  # max frames. 1 for ddp single inference (recommended)
 cfg_strength = 2.0
 speed = 1.0
-use_truth_duration = False
-no_ref_audio = False
 
 # -------------------------------------------------#
 
