@@ -5,3 +5,4 @@ ckpts/
 *.png
 .aider*
 *.sh
+*.pt

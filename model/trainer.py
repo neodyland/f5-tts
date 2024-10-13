@@ -130,6 +130,10 @@ class Trainer:
                 )
 
     def load_checkpoint(self):
+        if os.path.exists("./pretrain.pt"):
+            self.ema_model.load_state_dict(
+                torch.load("./pretrain.pt", weights_only=True)["ema_model_state_dict"]
+            )
         if (
             not exists(self.checkpoint_path)
             or not os.path.exists(self.checkpoint_path)

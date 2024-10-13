@@ -81,7 +81,9 @@ def main() -> None:
         device = f"cuda:{accelerator.process_index}"
 
     checkpoint = torch.load(
-        args.checkpoint_path, map_location=device, weights_only=True
+        args.checkpoint_path,
+        map_location="cpu",
+        weights_only=True,  # to prevent oom for weaak GPU
     )
 
     model = CFM(
