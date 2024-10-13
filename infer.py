@@ -125,7 +125,6 @@ def main() -> None:
     duration = ref_audio_len + int(
         ref_audio_len / len(ref_codes) * len(gen_codes) / speed * 1.2
     )
-
     # Inference
     with torch.inference_mode():
         generated, _ = model.sample(
@@ -137,7 +136,6 @@ def main() -> None:
             steps=32,
             cfg_strength=cfg_strength,
             sway_sampling_coef=-1.0,
-            seed=114514,
         )
 
     source_mel = generated[:, :ref_audio_len, :]
