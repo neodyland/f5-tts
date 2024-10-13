@@ -189,8 +189,6 @@ class Trainer:
                 num_workers=num_workers,
                 pin_memory=False,
                 batch_size=self.batch_size,
-                shuffle=True,
-                generator=generator,
             )
         elif self.batch_size_type == "frame":
             self.accelerator.even_batches = False
