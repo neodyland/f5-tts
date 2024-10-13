@@ -113,7 +113,7 @@ def main() -> None:
     start = time.time()
     ref_codes = text_to_sequence(args.ref_text)[0]
     gen_codes = text_to_sequence(args.gen_text)[0]
-    audio, sr = torchaudio.load("test.wav")
+    audio, sr = torchaudio.load("source.wav")
     rms = torch.sqrt(torch.mean(torch.square(audio)))
     if rms < target_rms:
         audio = audio * target_rms / rms
@@ -140,13 +140,16 @@ def main() -> None:
             seed=114514,
         )
 
+    source_mel = generated[:, :ref_audio_len, :]
     generated = generated[:, ref_audio_len:, :]
     generated_mel_spec = rearrange(generated, "1 n d -> 1 d n")
+    source_mel_spec = rearrange(source_mel, "1 n d -> 1 d n")
     generated_wave = vocos.decode(generated_mel_spec.cpu())
     if rms < target_rms:
         generated_wave = generated_wave * rms / target_rms
 
-    save_spectrogram(generated_mel_spec[0].cpu().numpy(), f"output.png")
+    save_spectrogram(generated_mel_spec[0].cpu().numpy(), "output.png")
+    save_spectrogram(source_mel_spec[0].cpu().numpy(), "source.png")
     torchaudio.save(f"output.wav", generated_wave, target_sample_rate)
     print(f"Generated wav: {generated_wave.shape}")
     print(f"Took: {time.time() - start:.2f}s")
