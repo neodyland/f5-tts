@@ -93,6 +93,7 @@ duration = ref_audio_len + int(
     / len(text_to_sequence(ref_text)[0])
     * len(text_to_sequence(gen_text)[0])
     / speed
+    * 1.2
 )
 # Inference
 with torch.inference_mode():
