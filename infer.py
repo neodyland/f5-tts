@@ -41,14 +41,6 @@ vocos = Vocos.from_pretrained("charactr/vocos-mel-24khz")
 # Tokenizer
 vocab_char_map, vocab_size = get_tokenizer()
 
-if checkpoint is not None:
-    if use_ema == True:
-        ema_model = EMA(model, include_online_model=False).to(device)
-        ema_model.load_state_dict(checkpoint["ema_model_state_dict"])
-        ema_model.copy_params_from_ema_to_model()
-    else:
-        model.load_state_dict(checkpoint["model_state_dict"])
-
 start = time.time()
 ref_text = "水をマレーシアから買わなくてはならないのです。"
 gen_text = "おはようございます。"
