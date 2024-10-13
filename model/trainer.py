@@ -325,4 +325,5 @@ class Trainer:
                     self.save_checkpoint(global_step, last=True)
                 torch.cuda.empty_cache()
 
+        self.save_checkpoint(global_step, last=True)
         self.accelerator.end_training()
