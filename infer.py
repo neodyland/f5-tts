@@ -46,18 +46,20 @@ def main() -> None:
     parser.add_argument(
         "--ref_text",
         type=str,
+        default="水をマレーシアから買わなくてはならないのです。",
         help="テキスト",
     )
     parser.add_argument(
         "--gen_text",
         type=str,
+        default="明日の天気は、きっと晴れになるでしょう。",
         help="テキスト",
     )
     parser.add_argument(
         "--checkpoint_path",
         type=str,
-        required=True,
         help="モデルのパス",
+        default="ckpts/f5tts_jp/model_last.pt",
     )
     parser.add_argument(
         "--cpu",
