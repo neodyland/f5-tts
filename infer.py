@@ -92,7 +92,12 @@ if sr != target_sample_rate:
     audio = resampler(audio)
 audio = audio.to(device)
 ref_audio_len = audio.shape[-1] // hop_length
-duration = ref_audio_len + int(ref_audio_len / len(ref_text) * len(gen_text) / speed)
+duration = ref_audio_len + int(
+    ref_audio_len
+    / len(text_to_sequence(ref_text)[0])
+    * len(text_to_sequence(gen_text)[0])
+    / speed
+)
 # Inference
 with torch.inference_mode():
     generated, _ = model.sample(
