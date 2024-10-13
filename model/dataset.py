@@ -184,8 +184,8 @@ def collate_fn(batch):
     mel_specs = torch.stack(padded_mel_specs)
 
     text = [item["text"] for item in batch]
-    text = torch.nn.utils.rnn.pad_sequence(text, batch_first=True, padding_value=0)
     text_lengths = torch.tensor([len(item) for item in text], dtype=torch.long)
+    text = torch.nn.utils.rnn.pad_sequence(text, batch_first=True, padding_value=0)
     return dict(
         mel=mel_specs,
         mel_lengths=mel_lengths,
